@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Sonarqube Analysis') {
             steps {
-                dir('src/frontend') {
+                dir('src') {
                     withSonarQubeEnv('sonar-server') {
                         sh ''' $SCANNER_HOME/bin/sonar-scanner \
                         -Dsonar.projectName=tic-tac-toe-project \
