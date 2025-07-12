@@ -34,5 +34,4 @@ spec:
               port: {{ .Values.ticTacToe.readinessProbe.port }}
             initialDelaySeconds: {{ .Values.ticTacToe.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.ticTacToe.readinessProbe.periodSeconds }}
-      imagePullSecrets:
-        {{- toYaml .Values.ticTacToe.imagePullSecrets | nindent 8 }}
+      imagePullPolicy: {{ .Values.ticTacToe.image.pullPolicy }}  
