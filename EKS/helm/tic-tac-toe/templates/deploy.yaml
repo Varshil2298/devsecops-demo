@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "tic-tac-toe.fullname" . }}
+  name: tic-tac-toe
   labels:
-    {{- include "tic-tac-toe.labels" . | nindent 4 }}
+    app: tic-tac-toe
 spec:
   replicas: {{ .Values.tic-tac-toe.replicaCount }}
   selector:
     matchLabels:
-      {{- toYaml .Values.tic-tac-toe.appLabels | nindent 6 }}
+      app: tic-tac-toe
   template:
     metadata:
       labels:
-        {{- toYaml .Values.tic-tac-toe.appLabels | nindent 8 }}
+        app: tic-tac-toe
     spec:
       containers:
         - name: tic-tac-toe
