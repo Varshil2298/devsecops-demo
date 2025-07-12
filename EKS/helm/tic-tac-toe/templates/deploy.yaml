@@ -3,29 +3,29 @@ kind: Deployment
 metadata:
   name: tic-tac-toe
   labels:
-    app: tic-tac-toe
+    {{- toYaml .Values.ticTacToe.appLabels | nindent 4 }}
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: tic-tac-toe
+      {{- toYaml .Values.ticTacToe.appLabels | nindent 6 }}
   template:
     metadata:
       labels:
-        app: tic-tac-toe
+        {{- toYaml .Values.ticTacToe.appLabels | nindent 8 }}
     spec:
       containers:
-      - name: tic-tac-toe
-        image: "{{ .Values.ticTacToe.image.repo }}:{{ .Values.ticTacToe.image.version }}"
-        imagePullPolicy: {{ .Values.ticTacToe.image.pullPolicy }}
-        ports:
-          - containerPort: 80            
-        resources:
-          {{- toYaml .Values.ticTacToe.resources | nindent 12 }}
-        livenessProbe:
-          httpGet:
-            path: {{ .Values.ticTacToe.livenessProbe.path }}
-            port: {{ .Values.ticTacToe.livenessProbe.port }}
+        - name: tic-tac-toe
+          image: "{{ .Values.ticTacToe.image.repo }}:{{ .Values.ticTacToe.image.version }}"
+          imagePullPolicy: {{ .Values.ticTacToe.image.pullPolicy }}
+          ports:
+            - containerPort: 80            
+          resources:
+            {{- toYaml .Values.ticTacToe.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.ticTacToe.livenessProbe.path }}
+              port: {{ .Values.ticTacToe.livenessProbe.port }}
             initialDelaySeconds: {{ .Values.ticTacToe.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.ticTacToe.livenessProbe.periodSeconds }}
           readinessProbe:
@@ -33,5 +33,6 @@ spec:
               path: {{ .Values.ticTacToe.readinessProbe.path }}
               port: {{ .Values.ticTacToe.readinessProbe.port }}
             initialDelaySeconds: {{ .Values.ticTacToe.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.ticTacToe.readinessProbe.periodSeconds }}  
-      restartPolicy: Always      
+            periodSeconds: {{ .Values.ticTacToe.readinessProbe.periodSeconds }}
+      imagePullSecrets:
+        - name: github-container-registry
