@@ -20,7 +20,7 @@ const Square: React.FC<SquareProps> = ({ value, onClick, isWinningSquare }) => {
     }
     
     if (value === 'X') {
-      return `${baseClasses} bg-indigo-100 text-indigo-600`;
+      return `${baseClasses} bg-red-100 text-indigo-600`; //indigo
     }
     
     return `${baseClasses} bg-purple-100 text-purple-600`;
