@@ -15,17 +15,17 @@ spec:
         app: tic-tac-toe
     spec:
       containers:
-        - name: tic-tac-toe
-          image: "{{ .Values.ticTacToe.image.repo }}:{{ .Values.ticTacToe.image.version }}"
-          imagePullPolicy: {{ .Values.ticTacToe.image.pullPolicy }}
-          ports:
-            - containerPort: 80
-          resources:
-            {{- toYaml .Values.ticTacToe.resources | nindent 12 }}
-          livenessProbe:
-            httpGet:
-              path: {{ .Values.ticTacToe.livenessProbe.path }}
-              port: {{ .Values.ticTacToe.livenessProbe.port }}
+      - name: tic-tac-toe
+        image: "{{ .Values.ticTacToe.image.repo }}:{{ .Values.ticTacToe.image.version }}"
+        imagePullPolicy: {{ .Values.ticTacToe.image.pullPolicy }}
+        ports:
+          - containerPort: 80            
+        resources:
+          {{- toYaml .Values.ticTacToe.resources | nindent 12 }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.ticTacToe.livenessProbe.path }}
+            port: {{ .Values.ticTacToe.livenessProbe.port }}
             initialDelaySeconds: {{ .Values.ticTacToe.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.ticTacToe.livenessProbe.periodSeconds }}
           readinessProbe:
@@ -33,5 +33,5 @@ spec:
               path: {{ .Values.ticTacToe.readinessProbe.path }}
               port: {{ .Values.ticTacToe.readinessProbe.port }}
             initialDelaySeconds: {{ .Values.ticTacToe.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.ticTacToe.readinessProbe.periodSeconds }}
-      imagePullPolicy: {{ .Values.ticTacToe.image.pullPolicy }}  
+            periodSeconds: {{ .Values.ticTacToe.readinessProbe.periodSeconds }}  
+      restartPolicy: Always      
