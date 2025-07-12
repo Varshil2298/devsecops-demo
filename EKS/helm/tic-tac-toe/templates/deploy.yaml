@@ -16,23 +16,23 @@ spec:
     spec:
       containers:
         - name: tic-tac-toe
-          image: "{{ .Values.tic-tac-toe.image.repo }}:{{ .Values.tic-tac-toe.image.version }}"
-          imagePullPolicy: {{ .Values.tic-tac-toe.image.pullPolicy }}
+          image: "{{ .Values.ticTacToe.image.repo }}:{{ .Values.ticTacToe.image.version }}"
+          imagePullPolicy: {{ .Values.ticTacToe.image.pullPolicy }}
           ports:
             - containerPort: 80
           resources:
-            {{- toYaml .Values.tic-tac-toe.resources | nindent 12 }}
+            {{- toYaml .Values.ticTacToe.resources | nindent 12 }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.tic-tac-toe.livenessProbe.path }}
-              port: {{ .Values.tic-tac-toe.livenessProbe.port }}
-            initialDelaySeconds: {{ .Values.tic-tac-toe.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.tic-tac-toe.livenessProbe.periodSeconds }}
+              path: {{ .Values.ticTacToe.livenessProbe.path }}
+              port: {{ .Values.ticTacToe.livenessProbe.port }}
+            initialDelaySeconds: {{ .Values.ticTacToe.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.ticTacToe.livenessProbe.periodSeconds }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.tic-tac-toe.readinessProbe.path }}
-              port: {{ .Values.tic-tac-toe.readinessProbe.port }}
-            initialDelaySeconds: {{ .Values.tic-tac-toe.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.tic-tac-toe.readinessProbe.periodSeconds }}
+              path: {{ .Values.ticTacToe.readinessProbe.path }}
+              port: {{ .Values.ticTacToe.readinessProbe.port }}
+            initialDelaySeconds: {{ .Values.ticTacToe.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.ticTacToe.readinessProbe.periodSeconds }}
       imagePullSecrets:
-        {{- toYaml .Values.tic-tac-toe.imagePullSecrets | nindent 8 }}
+        {{- toYaml .Values.ticTacToe.imagePullSecrets | nindent 8 }}
