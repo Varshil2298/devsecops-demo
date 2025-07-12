@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tic-tac-toe.fullname" . }}
+  labels:
+    {{- include "tic-tac-toe.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- toYaml .Values.appLabels | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- toYaml .Values.appLabels | nindent 8 }}
+    spec:
+      containers:
+        - name: tic-tac-toe
+          image: "{{ .Values.tic-tac-toe.image.repo }}:{{ .Values.tic-tac-toe.image.version }}"
+          imagePullPolicy: {{ .Values.tic-tac-toe.image.pullPolicy }}
+          ports:
+            - containerPort: 80
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.livenessProbe.port }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.readinessProbe.port }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}

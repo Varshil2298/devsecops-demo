@@ -1,0 +1,37 @@
+tic-tac-toe:
+  replicaCount: 3
+
+  image:
+    repo: ghcr.io/iam-veeramalla/devsecops-demo
+    version: sha-fb64dc2ac8cd8d79ad4a75c58326596b59eaf402
+    pullPolicy: Always
+
+  imagePullSecrets:
+    - name: github-container-registry
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  resources:
+    limits:
+      cpu: "0.5"
+      memory: "512Mi"
+    requests:
+      cpu: "0.2"
+      memory: "256Mi"
+
+  livenessProbe:
+    path: /
+    port: 80
+    initialDelaySeconds: 30
+    periodSeconds: 10
+
+  readinessProbe:
+    path: /
+    port: 80
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+  appLabels:
+    app: tic-tac-toe
