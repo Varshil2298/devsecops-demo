@@ -5,7 +5,7 @@ metadata:
   labels:
     app: tic-tac-toe
 spec:
-  replicas: {{ .Values.tic-tac-toe.replicaCount }}
+  replicas: 3
   selector:
     matchLabels:
       app: tic-tac-toe
