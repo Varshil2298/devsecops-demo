@@ -2,8 +2,8 @@ tic-tac-toe:
   replicaCount: 3
 
   image:
-    repo: ghcr.io/iam-veeramalla/devsecops-demo
-    version: sha-fb64dc2ac8cd8d79ad4a75c58326596b59eaf402
+    repo: 851725549954.dkr.ecr.us-east-1.amazonaws.com/tic-tac-toe
+    version: 1
     pullPolicy: Always
 
   imagePullSecrets:
