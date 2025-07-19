@@ -68,7 +68,7 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                sh 'trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress --format json -o trivy-image-CRITICAL-results.json "${AWS_ECR_REPO_NAME}"'
+                sh 'trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress --format sarif -o trivy-image-CRITICAL-results.sarif "${AWS_ECR_REPO_NAME}"'
             }
         }
 
@@ -129,8 +129,8 @@ post {
     always {
         script {
             // Convert to HTML and JUnit reports for critical vulnerabilities
-            sh 'trivy convert --input trivy-image-CRITICAL-results.json --format template --template "./junit.tpl" --output trivy-image-CRITICAL-results.xml || true'
-            sh 'trivy convert --input trivy-image-CRITICAL-results.json --format template --template "./html.tpl" --output trivy-image-CRITICAL-results.html || true'
+            trivy convert --input trivy-image-CRITICAL-results.sarif --format template --template "./junit.tpl" --output trivy-image-CRITICAL-results.xml || true
+            trivy convert --input trivy-image-CRITICAL-results.sarif --format template --template "./html.tpl" --output trivy-image-CRITICAL-results.html || true
         // Publish Trivy JUnit test results
             junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
 
