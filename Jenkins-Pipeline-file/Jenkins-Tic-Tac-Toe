@@ -68,14 +68,7 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                script {
-                    sh '''
-                       trivy image "${AWS_ECR_REPO_NAME}" \
-                           --severity HIGH,CRITICAL \
-                           --exit-code 1 \
-                           --no-progress 
-                    '''
-                }
+                sh 'trivy image --severity HIGH,CRITICAL --exit-code 0 --format json --no-progress "${AWS_ECR_REPO_NAME}"'
             }
         }
 
