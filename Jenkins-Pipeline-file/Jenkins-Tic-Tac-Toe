@@ -72,6 +72,13 @@ pipeline {
             }
         }
 
+        stage('Download Trivy Templates') {
+           steps {
+               sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.18.3/contrib/junit.tpl -O junit.tpl || true'
+               sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.18.3/contrib/html.tpl -O html.tpl || true'
+             }
+        }
+
         stage("ECR Image Pushing") {
             steps {
                 script {
@@ -122,8 +129,8 @@ post {
     always {
         script {
             // Convert to HTML and JUnit reports for critical vulnerabilities
-            sh 'trivy convert --format template --template "@contrib/junit.tpl" --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json || true'
-            sh 'trivy convert --format template --template "@contrib/html.tpl" --output trivy-image-CRITICAL-results.html trivy-image-CRITICAL-results.json || true'
+            sh 'trivy convert --format template --template "./junit.tpl" --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json || true'
+            sh 'trivy convert --format template --template "./html.tpl" --output trivy-image-CRITICAL-results.html trivy-image-CRITICAL-results.json || true'
         // Publish Trivy JUnit test results
             junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
 
