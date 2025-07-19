@@ -72,7 +72,7 @@ pipeline {
                     sh '''
                        trivy image "${AWS_ECR_REPO_NAME}" \
                            --severity HIGH,CRITICAL \
-                           --exit-code 0 \
+                           --exit-code 1 \
                            --no-progress 
                     '''
                 }
