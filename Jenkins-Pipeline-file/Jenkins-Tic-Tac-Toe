@@ -68,7 +68,7 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                sh 'trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress "${AWS_ECR_REPO_NAME}" --format json --output trivy-image-CRITICAL-results.json'
+                sh 'trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress --format json -o trivy-image-CRITICAL-results.json "${AWS_ECR_REPO_NAME}"'
             }
         }
 
@@ -123,18 +123,12 @@ post {
             // Convert to HTML and JUnit reports for critical vulnerabilities
         sh '''
             trivy convert \
-                --input trivy-image-CRITICAL-results.json \
-                --format template \
-                --template "@/usr/local/share/trivy/templates/html.tpl" \
-                --output trivy-image-CRITICAL-results.html \
-                trivy-image-CRITICAL-results.json
+                --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json
                 
             trivy convert \
-                --input trivy-image-CRITICAL-results.json \
-                --format template \
-                --template "@/usr/local/share/trivy/templates/junit.tpl" \
-                --output trivy-image-CRITICAL-results.xml \
-                trivy-image-CRITICAL-results.json
+                --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
+                --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json
         '''
 
         // Publish Trivy JUnit test results
