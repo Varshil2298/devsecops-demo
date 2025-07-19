@@ -68,7 +68,7 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                sh 'trivy image 851725549954.dkr.ecr.us-east-1.amazonaws.com/tic-tac-toe:20 --severity HIGH,CRITICAL'
+                sh 'trivy image ${AWS_ECR_REPO_NAME} --severity HIGH,CRITICAL --exit-code 0 --quiet'
             }
         }
     //}
