@@ -68,7 +68,7 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                sh 'trivy image "${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}" --severity HIGH,CRITICAL --exit-code 0 --quiet'
+                sh 'trivy image --severity HIGH,CRITICAL --exit-code 0 --quiet "${AWS_ECR_REPO_NAME}"'
             }
         }
     //}
