@@ -70,7 +70,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        trivy image ${AWS_ECR_REPO_NAME} \
+                        trivy image 851725549954.dkr.ecr.us-east-1.amazonaws.com/tic-tac-toe:4 \
                             --severity HIGH,CRITICAL \
                             --format json -o trivy-image-CRITICAL-results.json
                     '''
