@@ -68,15 +68,8 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                sh 'trivy image --severity HIGH,CRITICAL --exit-code 0 --format json -o trivy-image-CRITICAL-results.json "${AWS_ECR_REPO_NAME}"'
+                sh 'trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress --format json -o trivy-image-CRITICAL-results.json "${AWS_ECR_REPO_NAME}"'
             }
-        }
-
-        stage('Download Trivy Templates') {
-           steps {
-               sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.18.3/contrib/junit.tpl -O junit.tpl || true'
-               sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.18.3/contrib/html.tpl -O html.tpl || true'
-             }
         }
 
         stage("ECR Image Pushing") {
@@ -128,26 +121,34 @@ pipeline {
 post {
     always {
         script {
-            // Convert to HTML and JUnit reports for critical vulnerabilities
-            sh 'trivy convert --input trivy-image-CRITICAL-results.json --format template --template "./junit.tpl" --output trivy-image-CRITICAL-results.xml || true'
-        // Publish Trivy JUnit test results
+            // Your wget commands to download templates (as you've already done successfully)
+            sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.18.3/contrib/junit.tpl -O junit.tpl || true'
+            sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.18.3/contrib/html.tpl -O html.tpl || true'
+
+            // --- Convert to JUnit report using a pipe ---
+            //  Cat the JSON report and pipe it to trivy convert
+            sh 'cat trivy-image-CRITICAL-results.json | trivy convert --format template --template "./junit.tpl" --output trivy-image-CRITICAL-results.xml - || true'
+
+            // Publish Trivy JUnit test results
             junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
 
-        // Publish Trivy HTML report for critical vulnerabilities
+            // --- Convert to HTML report using a pipe ---
+            // Cat the JSON report and pipe it to trivy convert
+            sh 'cat trivy-image-CRITICAL-results.json | trivy convert --format template --template "./html.tpl" --output trivy-image-CRITICAL-results.html - || true'
+
+            // Publish Trivy HTML report for critical vulnerabilities
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: './',
+                reportDir: './', // Assuming reports are in the current working directory
                 reportFiles: 'trivy-image-CRITICAL-results.html',
                 reportName: 'Trivy Image Severity Vul Report'
             ])
 
-            // Send Slack notification
-  //     slacknotificationmethod("${currentBuild.result}")   
-        
-
-     }
-   }
-  }
+            // Send Slack notification (ensure this method is defined)
+            // slacknotificationmethod("${currentBuild.result}")
+        }
+    }
+}
 }
