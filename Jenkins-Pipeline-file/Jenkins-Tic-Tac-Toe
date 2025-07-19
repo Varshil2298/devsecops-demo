@@ -121,10 +121,7 @@ pipeline {
 post {
     always {
             // Convert to HTML and JUnit reports for critical vulnerabilities
-        sh '''
-            trivy convert --input trivy-image-CRITICAL-results.json --format template --template "@/usr/local/share/trivy/templates/html.tpl" --output trivy-image-CRITICAL-results.html
-            trivy convert --input trivy-image-CRITICAL-results.json --format template --template "@/usr/local/share/trivy/templates/junit.tpl" --output trivy-image-CRITICAL-results.xml
-        '''
+        sh 'trivy convert --input trivy-image-CRITICAL-results.json --format template --template "@/usr/local/share/trivy/templates/junit.tpl" --output trivy-image-CRITICAL-results.xml'
         // Publish Trivy JUnit test results
         junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
 
