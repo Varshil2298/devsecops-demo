@@ -130,12 +130,17 @@ post {
                  --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
                  --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json
         '''
+    }
+}    
 
+post {
+   always {
         // Publish Trivy JUnit test results
-        junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
+       junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
+       junit allowEmptyResults: true, testResults: 'depedency-check-junit.xml'
 
         // Publish Trivy HTML report for critical vulnerabilities
-        publishHTML(target: [
+       publishHTML(target: [
             allowMissing: true,
             alwaysLinkToLastBuild: true,
             keepAll: true,
