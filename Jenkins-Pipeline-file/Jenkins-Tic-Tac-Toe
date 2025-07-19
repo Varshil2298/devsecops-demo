@@ -70,7 +70,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    trivy image ${AWS_ECR_REPO_NAME} \
+                    trivy image "${AWS_ECR_REPO_NAME}" \
                     --severity HIGH,CRITICAL \
                     --exit-code 0 \
                     --quiet \
