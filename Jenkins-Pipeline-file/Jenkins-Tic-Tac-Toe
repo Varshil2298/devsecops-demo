@@ -123,9 +123,8 @@ post {
             // Convert to HTML and JUnit reports for critical vulnerabilities
         sh '''
             trivy convert \
-                --input trivy-image-results.json \
                 --format template --template "/usr/local/share/trivy/templates/junit.tpl" \
-                --output trivy-image-CRITICAL-results.xml
+                --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json
         '''
         // Publish Trivy JUnit test results
         junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
