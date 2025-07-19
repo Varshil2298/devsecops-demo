@@ -70,6 +70,8 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    IMAGE_NAME=$(echo "${AWS_ECR_REPO_NAME}" | awk '{print $1}')
+                    echo "Using image: $IMAGE_NAME"
                     trivy image "${AWS_ECR_REPO_NAME}" \
                     --severity HIGH,CRITICAL \
                     --exit-code 0 \
