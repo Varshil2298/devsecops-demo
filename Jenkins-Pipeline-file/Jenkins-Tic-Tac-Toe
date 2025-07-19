@@ -134,13 +134,13 @@ post {
 }    
 
 post {
-   always {
+    always {
         // Publish Trivy JUnit test results
-       junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
-       junit allowEmptyResults: true, testResults: 'depedency-check-junit.xml'
+        junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
+        junit allowEmptyResults: true, testResults: 'depedency-check-junit.xml'
 
         // Publish Trivy HTML report for critical vulnerabilities
-       publishHTML(target: [
+        publishHTML(target: [
             allowMissing: true,
             alwaysLinkToLastBuild: true,
             keepAll: true,
