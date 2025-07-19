@@ -121,20 +121,18 @@ pipeline {
 post {
     always {
         script {
-            // Your wget commands to download templates (as you've already done successfully)
-            sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.18.3/contrib/junit.tpl -O junit.tpl || true'
-            sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.18.3/contrib/html.tpl -O html.tpl || true'
+            // Your wget commands to download templates (ensure they are downloaded to the workspace)
+            sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.64.1/contrib/junit.tpl -O junit.tpl || true'
+            sh 'wget https://raw.githubusercontent.com/aquasecurity/trivy/v0.64.1/contrib/html.tpl -O html.tpl || true'
 
-            // --- Convert to JUnit report using a pipe ---
-            //  Cat the JSON report and pipe it to trivy convert
-            sh 'cat trivy-image-CRITICAL-results.json | trivy convert --format template --template "./junit.tpl" --output trivy-image-CRITICAL-results.xml - || true'
+            // --- Convert to JUnit report (using file path as last argument) ---
+            sh 'trivy convert --format template --template "./junit.tpl" --output trivy-image-CRITICAL-results.xml trivy-image-CRITICAL-results.json || true'
 
             // Publish Trivy JUnit test results
             junit allowEmptyResults: true, testResults: 'trivy-image-CRITICAL-results.xml'
 
-            // --- Convert to HTML report using a pipe ---
-            // Cat the JSON report and pipe it to trivy convert
-            sh 'cat trivy-image-CRITICAL-results.json | trivy convert --format template --template "./html.tpl" --output trivy-image-CRITICAL-results.html - || true'
+            // --- Convert to HTML report (using file path as last argument) ---
+            sh 'trivy convert --format template --template "./html.tpl" --output trivy-image-CRITICAL-results.html trivy-image-CRITICAL-results.json || true'
 
             // Publish Trivy HTML report for critical vulnerabilities
             publishHTML(target: [
