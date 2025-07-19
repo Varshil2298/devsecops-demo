@@ -56,14 +56,6 @@ pipeline {
                 }
             }
         }
-        // stage('OWASP Dependency-Check Scan') {
-        //     steps {
-        //         dir('web') {
-        //             dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-        //             dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-        //         }
-        //     }
-        // }
         stage("Docker Image Build") {
             steps {
                 script {
@@ -74,23 +66,19 @@ pipeline {
         }
     }
 
-        // stage('Trivy Scan') {
-        //     steps {
-        //         script {
-        //             def imageName = sh(script: 'echo "$AWS_ECR_REPO_NAME"', returnStdout: true).trim()
-
-        //             echo "[INFO] Scanning image: ${imageName}"
-
-        //             sh '''
-        //                trivy image ${AWS_ECR_REPO_NAME} \
-        //                   --severity HIGH,CRITICAL \
-        //                   --exit-code 0 \
-        //                   --quiet \
-        //                   --format json -o trivy-image-CRITICAL-results.json
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Trivy Scan') {
+            steps {
+                script {
+                    sh '''
+                    trivy image ${AWS_ECR_REPO_NAME} \
+                    --severity HIGH,CRITICAL \
+                    --exit-code 0 \
+                    --quiet \
+                    --format json -o trivy-image-CRITICAL-results.json
+                    '''
+                }
+            }
+        }
 
         stage("ECR Image Pushing") {
             steps {
