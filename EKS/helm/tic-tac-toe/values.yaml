@@ -1,7 +1,7 @@
 ticTacToe:
   image:
     repo: 851725549954.dkr.ecr.us-east-1.amazonaws.com/tic-tac-toe
-    version: 59
+    version: 60
     pullPolicy: IfNotPresent
 
   service:
